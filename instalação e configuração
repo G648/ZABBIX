@@ -1,0 +1,51 @@
+ZABIIX - MONITORAMENTO
+INSTALAÇÃO:
+	-após configurar as interfaces 
+	-instalar apt install apache2 mysql-server -y
+	-apt install php php-mbstring php-gd php-xml php-bcmath php-ldap php-mysql -y
+	-após realizar a instalçao desses programas, fazer edição no arquivo
+	Alterar os arquivos vi /etc/php/7.0/apache2/php.ini 
+		-descomentar date.timezone linha 924 (/nome do que qer procurar)
+	Alterar os arquivos vi /etc/php/7.0/cli/php.ini
+		-ir em date.timezone e colocar AMERICA/SAO PAULO (DESCOMENTAR)
+		
+	Após realizar essas alterações, baixar o wget https://repo.zabbix.com/zabbix/4.0/debian/pool/main/z/zabbix-release/zabbix-release_4.0-3+stretch_all.deb
+		-dpkg -i zabbix-release_4.0-3+stretch_all.deb
+		-realizar o apt update
+	-instalar apt install zabbix-agent -y
+		-systemctl enable zabbix-agent service
+		-systemctl start zabbix-agent service
+		-apt-get install zabbix-server-mysql zabbix-frontend-php zabbix-get -y
+		-mysql -u root -p
+			CREATE DATABASE zabbixdb character set utf8 collate utf8_bin;
+			CREATE USER 'zabbix'@'localhost' IDENTIFIED BY 'P@ssw0rd';
+			GRANT ALL PRIVILEGES ON zabbixdb.* TO 'zabbix'@'localhost' WITH GRANT OPTION;
+			FLUSH PRIVILEGES;
+			sair e entrar novamente
+			dar o comando: use zabbixdb;
+		-após a edição, colocar este comando : zcat /usr/share/doc/zabbix-server-mysql/create.sql.gz | mysql -u zabbix -p zabbixdb
+			
+		-vi /etc/zabbix/zabbix_server.conf
+			-descomentar o DBhost 
+			-descomentar o DBname e colocar DBname zabbixdb
+			-DBPassword colocar como P@ssw0rd 
+	-systemctl restart apache2, zabbix-server e zabbix-agent.service
+		
+		
+	IR NO DEBIAN 8 HELSINQUE E INSTALAR:	
+		-apt install zabbix-agent
+		-vi /etc/zabbix/zabbix_agentd.conf (configurar arquivos neste diretorio)
+			-no Server, colocar o ip do zabbix (moscou: 172.31.100.250)
+			-no ServerActive, colocar o ip do moscou 
+			-no hostname colocar o nome do helsinque
+		-restartar (systemctl enable zabbix-agente.service - systemctl restart zabbi.service
+		-ir no servidor zabbix e quando for adicionar o host ir em template e colocar o sistema operacional do servidor que vai ser monitorado.
+		
+	TUDO CERTO.
+	
+	APÓS CONSEGUIR ACESSO AO ZABBIX,
+		-criar um hostgrupo (SENAI)em configurações
+			-ir em create host
+			-colocar o nome do host que voce quer (helsinque, toquio e moscou)
+			-colocar o ip do host
+		-ir em templates e colcoar windows SO
