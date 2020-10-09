@@ -1,0 +1,28 @@
+INVENTARIADO:
+	-fazer a contagem de equipamentos ou até mesmo redes 
+		é saber o que está na sua rede (fazer um mapeamento)
+	
+	-ao entrar no zabbix:	
+		-ir em configurações 
+			-hosts
+			-clicar no host que voce quer criar o inventario
+				-ir em host inventary
+					-automatic e clicar em update
+			-ir no host e clicar em item
+				-clicar em create item
+				-vamos moitorar o MAC
+					-ir em name e colocar MAC address
+					-em key, clicar em select
+						-selecionar a chave MAC 
+						-colcoar a interface,full
+					
+		https://www.zabbix.com/documentation/4.0/pt/manual/config/items/itemtypes/zabbix_agent
+		
+		
+		
+		{SRVMON-HELSINQUE:net.tcp.service[http,,80].sum(10)}=0
+Este trigger verificar o status da porta 80 do servidor SRVMON-HELSINQUE, onde, se a condição 0 
+(serviço fora do ar) permanecer por 10 segundo (sum(10)), o Zabbix alarmará a condição HIGH (crítico)
+
+
+zabbix ALL=NOPASSWD:/bin/systemctl restart apache2.service, /bin/kill
